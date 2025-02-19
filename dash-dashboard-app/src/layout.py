@@ -1,29 +1,33 @@
-from dash import Dash, html, dcc
+from dash import dcc, html
 
-app = Dash(__name__)
-
-app.layout = html.Div([
-    html.H1("PM10 Concentration Dashboard"),
-    
-    dcc.Dropdown(
-        id='plot-type-dropdown',
-        options=[
-            {'label': 'Daily Concentrations', 'value': 'daily'},
-            {'label': 'Monthly Concentrations', 'value': 'monthly'},
-            {'label': 'Annual Concentrations', 'value': 'annual'},
-            {'label': 'Monthly Distribution', 'value': 'monthly_distribution'},
-            {'label': 'Weekly Distribution', 'value': 'weekly_distribution'},
-            {'label': 'Monthly Trend Analysis', 'value': 'monthly_trend'},
-            {'label': 'Hourly Distribution', 'value': 'hourly_distribution'},
-            {'label': 'Mean PM10 by Day of Week', 'value': 'mean_day_of_week'},
-            {'label': 'Mean PM10 by Year for Each Season', 'value': 'mean_season'},
-            {'label': 'Annual Trend Analysis with CI', 'value': 'annual_trend_ci'},
-        ],
-        value='daily'
-    ),
-    
-    dcc.Graph(id='graph-output'),
-])
-
-if __name__ == '__main__':
-    app.run_server(debug=True)
+def create_layout():
+    return html.Div([
+        dcc.Upload(
+            id='upload-data',
+            children=html.Div([
+                'Drag and Drop or ',
+                html.A('Select Files')
+            ]),
+            style={
+                'width': '100%',
+                'height': '60px',
+                'lineHeight': '60px',
+                'borderWidth': '1px',
+                'borderStyle': 'dashed',
+                'borderRadius': '5px',
+                'textAlign': 'center',
+                'margin': '10px'
+            },
+            multiple=True
+        ),
+        dcc.Dropdown(
+            id='plot-selector',
+            options=[
+                {'label': 'Daily Concentrations', 'value': 'daily_concentrations'},
+                {'label': 'Monthly Concentrations', 'value': 'monthly_concentrations'},
+                # Add more plot options here
+            ],
+            placeholder="Select a plot"
+        ),
+        html.Div(id='output-plot')
+    ])
